@@ -1,0 +1,183 @@
+paths:
+  /api/adoptions:
+    get:
+      summary: 'Obtener todas las adopciones'
+      description: 'Devuelve una lista de todas las adopciones registradas en el sistema.'
+      tags:
+        - Adoptions
+      responses:
+        '200':
+          description: 'Lista de adopciones obtenida con éxito.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'success'
+                  payload:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Adoption'
+        '500':
+          description: 'Error al recuperar las adopciones.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'error'
+                  error:
+                    type: string
+                    example: 'Failed to retrieve adoptions'
+
+  /api/adoptions/{aid}:
+    get:
+      summary: 'Obtener una adopción específica'
+      description: 'Devuelve los detalles de una adopción mediante su ID.'
+      tags:
+        - Adoptions
+      parameters:
+        - name: aid
+          in: path
+          required: true
+          description: 'ID de la adopción.'
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'Detalles de la adopción obtenidos con éxito.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'success'
+                  payload:
+                    $ref: '#/components/schemas/Adoption'
+        '404':
+          description: 'Adopción no encontrada.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'error'
+                  error:
+                    type: string
+                    example: 'Adoption not found'
+        '500':
+          description: 'Error al recuperar la adopción.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'error'
+                  error:
+                    type: string
+                    example: 'Failed to retrieve adoption'
+
+  /api/adoptions/{uid}/{pid}:
+    post:
+      summary: 'Crear una nueva adopción'
+      description: 'Permite a un usuario adoptar una mascota especificada.'
+      tags:
+        - Adoptions
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          description: 'ID del usuario que adopta.'
+          schema:
+            type: string
+        - name: pid
+          in: path
+          required: true
+          description: 'ID de la mascota que será adoptada.'
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'Adopción creada con éxito.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'success'
+                  message:
+                    type: string
+                    example: 'Pet adopted'
+                  payload:
+                    $ref: '#/components/schemas/Adoption'
+        '404':
+          description: 'Usuario o mascota no encontrados.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'error'
+                  error:
+                    type: string
+                    example: 'User or pet not found'
+        '400':
+          description: 'Mascota ya adoptada.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'error'
+                  error:
+                    type: string
+                    example: 'Pet is already adopted'
+        '500':
+          description: 'Error al crear la adopción.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'error'
+                  error:
+                    type: string
+                    example: 'Failed to create adoption'
+
+components:
+  schemas:
+    Adoption:
+      type: object
+      properties:
+        owner:
+          type: string
+          description: 'ID del usuario que adoptó la mascota.'
+        pet:
+          type: string
+          description: 'ID de la mascota adoptada.'
+        date:
+          type: string
+          format: date-time
+          description: 'Fecha de la adopción.'
+      example:
+        _id: '674122742e846991f014e0dc'
+        owner: '60b8d295ba7b3e001c9e8c1c'
+        pet: '60b8d295ba7b3e001c9e8c1d'

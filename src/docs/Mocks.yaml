@@ -1,0 +1,236 @@
+paths:
+  /api/mocks/pets:
+    get:
+      summary: 'Generar mascotas mockeadas'
+      description: 'Genera una cantidad específica de mascotas mockeadas.'
+      tags:
+        - Mocks
+      parameters:
+        - name: num
+          in: query
+          required: false
+          description: 'Número de mascotas a generar.'
+          schema:
+            type: integer
+            example: 100
+      responses:
+        '200':
+          description: 'Mascotas mockeadas generadas con éxito.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'success'
+                  payload:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Pets'
+        '400':
+          description: 'Valor inválido para el número de mascotas.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'error'
+                  error:
+                    type: string
+                    example: 'Incomplete values'
+        '500':
+          description: 'Error al generar las mascotas mockeadas.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'error'
+                  error:
+                    type: string
+                    example: 'Failed to generate mock pets'
+
+  /api/mocks/users:
+    get:
+      summary: 'Generar usuarios mockeados'
+      description: 'Genera una cantidad específica de usuarios mockeados.'
+      tags:
+        - Mocks
+      parameters:
+        - name: num
+          in: query
+          required: false
+          description: 'Número de usuarios a generar.'
+          schema:
+            type: integer
+            example: 50
+      responses:
+        '200':
+          description: 'Usuarios mockeados generados con éxito.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'success'
+                  payload:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Users'
+        '400':
+          description: 'Valor inválido para el número de usuarios.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'error'
+                  error:
+                    type: string
+                    example: 'Incomplete values'
+        '500':
+          description: 'Error al generar los usuarios mockeados.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'error'
+                  error:
+                    type: string
+                    example: 'Failed to generate mock users'
+
+  /api/mocks/generateData:
+    post:
+      summary: 'Generar y insertar usuarios y mascotas en la base de datos'
+      description: 'Genera e inserta usuarios y mascotas mockeadas en la base de datos.'
+      tags:
+        - Mocks
+      parameters:
+        - name: users
+          in: query
+          required: false
+          description: 'Número de usuarios a generar.'
+          schema:
+            type: integer
+            example: 50
+        - name: pets
+          in: query
+          required: false
+          description: 'Número de mascotas a generar.'
+          schema:
+            type: integer
+            example: 100
+      responses:
+        '200':
+          description: 'Usuarios y mascotas generados e insertados con éxito.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'success'
+                  message:
+                    type: string
+                    example: 'X usuarios y X mascotas generados e insertados en la base de datos.'
+        '400':
+          description: 'Parámetros inválidos.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'error'
+                  message:
+                    type: string
+                    example:
+                      "Parámetros inválidos. 'users' y 'pets' no deben ser números negativos."
+        '500':
+          description: 'Error al generar los datos.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'error'
+                  error:
+                    type: string
+                    example: 'Failed to generate mock data'
+
+components:
+  schemas:
+    Pets:
+      type: object
+      properties:
+        name:
+          type: string
+          description: 'Nombre de la mascota.'
+        species:
+          type: string
+          description: 'Especie de la mascota.'
+        breed:
+          type: string
+          description: 'Raza de la mascota.'
+        age:
+          type: integer
+          description: 'Edad de la mascota.'
+        adopted:
+          type: boolean
+          description: 'Estado de adopción de la mascota.'
+        owner:
+          type: string
+          description: 'ID del propietario de la mascota. Si no está adoptada, es null.'
+      example:
+        name: 'Alma'
+        species: 'Dog'
+        age: 5
+        adopted: false
+        owner: null
+
+    Users:
+      type: object
+      properties:
+        first_name:
+          type: string
+          description: 'Primer nombre del usuario.'
+        last_name:
+          type: string
+          description: 'Apellido del usuario.'
+        email:
+          type: string
+          description: 'Correo electrónico del usuario.'
+        password:
+          type: string
+          description: 'Contraseña encriptada del usuario.'
+        role:
+          type: string
+          description: 'Rol del usuario, como "admin" o "user".'
+        pets:
+          type: array
+          items:
+            type: string
+          description: 'Lista de IDs de las mascotas del usuario.'
+      example:
+        first_name: 'Jorge'
+        last_name: 'Kuhn'
+        email: 'jorge@gmail.com'
+        password: 'Contraseña Hasheada'
+        role: 'admin'
+        pets: []
