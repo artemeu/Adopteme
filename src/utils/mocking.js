@@ -6,7 +6,7 @@ export const generateMockPets = num => {
   const pets = [];
   for (let i = 0; i < num; i++) {
     const pet = {
-      name: faker.animal.dog(), // Generar nombre aleatorio de perro
+      name: faker.animal.dog(),
       species: faker.animal.type(),
       age: Math.floor(Math.random() * 15), // Edad aleatoria entre 0 y 15
       adopted: false,
@@ -25,7 +25,7 @@ export const generateMockUsers = async num => {
     const firstName = faker.person.firstName();
     const lastName = faker.person.lastName();
     const email = faker.internet.email();
-    const password = await createHash('coder123'); // Usamos la contraseña estática y la encriptamos
+    const password = await createHash('coder123');
     const role = Math.random() > 0.5 ? 'user' : 'admin'; // Randomiza el rol entre user y admin
     const pets = [];
 

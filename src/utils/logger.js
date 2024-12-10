@@ -1,4 +1,7 @@
 import winston from 'winston';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 // Definir los niveles de log
 const logLevels = {
@@ -48,11 +51,8 @@ const prodLogger = winston.createLogger({
   ]
 });
 
-// Obtener el flag de entorno (production o development)
-const environment = process.argv[2];
-
-// Si el entorno es producción, agregar el transporte de archivo
-if (environment === 'production') {
+// Si NODE_ENV es 'production', agregar el transporte de archivo
+if (process.env.NODE_ENV === 'production') {
   prodLogger.add(
     new winston.transports.File({
       filename: 'errors_prod.log',
@@ -62,6 +62,8 @@ if (environment === 'production') {
   );
 }
 
+// Asignar el logger según el entorno
+const environment = process.env.NODE_ENV || 'development';
 const logger = environment === 'production' ? prodLogger : devLogger;
 
 export default logger;

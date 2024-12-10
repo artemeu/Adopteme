@@ -22,6 +22,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(cookieParser(process.env.SECRET));
 
+//Uso de logs en las rutas
 app.use(logRequest);
 
 app.use('/api/users', usersRouter);

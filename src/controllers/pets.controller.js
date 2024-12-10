@@ -12,6 +12,18 @@ const getAllPets = async (req, res, next) => {
   }
 };
 
+// Obtener una mascota
+const getPetById = async (req, res, next) => {
+  const petId = req.params.pid;
+  try {
+    const pet = await petsService.getPetById(petId);
+    if (!pet) return next({ type: 'petNotFound' });
+    res.send({ status: 'success', payload: pet });
+  } catch (error) {
+    next({ type: 'failedToRetrievePets' });
+  }
+};
+
 // Crear una nueva mascota
 const createPet = async (req, res, next) => {
   const { name, species, birthDate } = req.body;
@@ -65,14 +77,14 @@ const clearAllPets = async (req, res, next) => {
 // Crear una mascota con imagen
 const createPetWithImage = async (req, res, next) => {
   const file = req.file;
-  const { name, specie, birthDate } = req.body;
+  const { name, species, birthDate } = req.body;
 
-  if (!name || !specie || !birthDate || !file) return next({ type: 'incompleteValues' });
+  if (!name || !species || !birthDate || !file) return next({ type: 'incompleteValues' });
 
   try {
     const pet = PetDTO.getPetInputFrom({
       name,
-      specie,
+      species,
       birthDate,
       image: `${__dirname}/../public/img/${file.filename}`
     });
@@ -86,6 +98,7 @@ const createPetWithImage = async (req, res, next) => {
 
 export default {
   getAllPets,
+  getPetById,
   createPet,
   updatePet,
   deletePet,
